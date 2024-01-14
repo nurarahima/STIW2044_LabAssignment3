@@ -1,0 +1,44 @@
+import 'package:flutter/material.dart';
+
+class Book {
+  final String title;
+  final double price;
+  int quantity;
+
+  Book({
+    required this.title,
+    required this.price,
+    this.quantity = 1,
+  });
+}
+
+class CartProvider with ChangeNotifier {
+  List<Book> _cart = [];
+
+  List<Book> get cart => _cart;
+
+  void addToCart(Book book) {
+    int index = _cart.indexWhere((element) => element.title == book.title);
+
+    if (index != -1) {
+      _cart[index].quantity++;
+    } else {
+      _cart.add(book);
+    }
+
+    notifyListeners();
+  }
+
+  void removeFromCart(int index) {
+    _cart.removeAt(index);
+    notifyListeners();
+  }
+
+  int get totalItemsInCart {
+  return _cart.fold(
+    0,
+    (previousValue, book) => previousValue + book.quantity,
+  );
+}
+
+}
